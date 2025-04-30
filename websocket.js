@@ -97,4 +97,15 @@ wss.on('connection', (ws, req) => {
     ws.on('close', () => {
         console.log(`WebSocket connection from ${clientIp} (${country}) closed.`);
     });
+
+    // Handle errors
+    ws.on('error', (error) => {
+        console.log(`WebSocket error with ${clientIp} (${country}): ${error}`);
+    });
+});
+
+// Start the HTTP server
+const PORT = process.env.PORT || 80; // Use environment variable or default to 80
+server.listen(PORT, () => {
+    console.log(`HTTP and WebSocket server running on http://localhost:${PORT} and ws://localhost:${PORT}`);
 });
