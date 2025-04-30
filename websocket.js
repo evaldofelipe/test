@@ -15,7 +15,9 @@ const server = http.createServer((req, res) => {
     const geo = geoip.lookup(clientIp);
     const country = geo ? geo.country : 'Unknown';
 
+    // Log more details: Method, URL, IP, Country, and Headers
     console.log(`HTTP Request: ${req.method} ${req.url} from ${clientIp} (${country})`);
+    console.log(`Headers: ${JSON.stringify(req.headers, null, 2)}`); // Log headers
 
     // --- Handle Root Path ---
     if (req.url === '/' && req.method === 'GET') {
@@ -93,17 +95,6 @@ wss.on('connection', (ws, req) => {
 
     // Handle connection close
     ws.on('close', () => {
-        console.log(`WebSocket connection from ${clientIp} (${country}) closed`);
+        console.log(`WebSocket connection from ${clientIp} (${country}) closed.`);
     });
-
-    // Handle errors
-    ws.on('error', (error) => {
-        console.log(`WebSocket error with ${clientIp} (${country}): ${error}`);
-    });
-});
-
-// Start the HTTP server
-const PORT = 8080;
-server.listen(PORT, () => {
-    console.log(`HTTP and WebSocket server running on http://localhost:${PORT} and ws://localhost:${PORT}`);
 });
